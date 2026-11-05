@@ -26,17 +26,8 @@ proxy-groups:
     url: "http://www.gstatic.com/generate_204"
     interval: 300
     tolerance: 50
-    filter: "(?i)日本|台湾|新加坡|JP|TW|SG|新北|台北|狮城|🇭🇰|🇯🇵|🇹🇼|🇸🇬"
+    filter: "(?i)日本|台湾|新加坡|JP|TW|SG|新北|台北|狮城|🇯🇵|🇹🇼|🇸🇬"
 
-  # 新增：Spotify 专用策略组（默认优先走新加坡自动测速）
-  - name: "Spotify"
-    type: select
-    proxies:
-      - "新加坡-自动测速"
-      - "日台新-自动测速"
-      - "节点选择"
-
-  # 新增：新加坡独立自动测速组（专门筛选 SG 节点）
   - name: "新加坡-自动测速"
     type: url-test
     url: "http://www.gstatic.com/generate_204"
@@ -44,7 +35,13 @@ proxy-groups:
     tolerance: 50
     filter: "(?i)新加坡|SG|狮城|🇸🇬"
 
-  # AI 综合组（包含 ChatGPT、Gemini、Claude 等）
+  - name: "Spotify"
+    type: select
+    proxies:
+      - "新加坡-自动测速"
+      - "日台新-自动测速"
+      - "节点选择"
+
   - name: "AI"
     type: select
     proxies:
@@ -57,13 +54,11 @@ rules:
   - GEOIP,CN,DIRECT
   - GEOSITE,CN,DIRECT
 
-  # 1. Spotify 专项规则（自动走 Spotify 组 -> 新加坡）
   - GEOSITE,spotify,Spotify
   - DOMAIN-SUFFIX,spotify.com,Spotify
   - DOMAIN-SUFFIX,scdn.co,Spotify
   - DOMAIN-KEYWORD,spotify,Spotify
 
-  # 2. AI 专项规则（走 AI 组 -> 日台新）
   - GEOSITE,openai,AI
   - DOMAIN-SUFFIX,openai.com,AI
   - DOMAIN-SUFFIX,chatgpt.com,AI
@@ -82,5 +77,4 @@ rules:
   - DOMAIN-SUFFIX,perplexity.ai,AI
   - DOMAIN-SUFFIX,copilot.microsoft.com,AI
 
-  # 其他流量
   - MATCH,节点选择
