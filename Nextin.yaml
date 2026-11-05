@@ -69,14 +69,23 @@ proxy-groups:
       - "节点选择"
 
 rules:
+  # Spotify流量分流
   - GEOSITE,spotify,Spotify
   - DOMAIN-SUFFIX,spotify.com,Spotify
   - DOMAIN-KEYWORD,spotify,Spotify
+
+  # 国外AI流量分流
   - GEOSITE,openai,AI
   - DOMAIN-SUFFIX,openai.com,AI
   - DOMAIN-SUFFIX,chatgpt.com,AI
   - GEOSITE,google-gemini,AI
   - DOMAIN-SUFFIX,gemini.google.com,AI
+  - DOMAIN-KEYWORD,gemini,AI
   - GEOSITE,anthropic,AI
   - DOMAIN-SUFFIX,claude.ai,AI
+  
+  # 基础流量分流
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - GEOSITE,CN,DIRECT
   - MATCH,节点选择
