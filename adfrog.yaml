@@ -1,80 +1,52 @@
 proxy-groups:
   - name: "节点选择"
     type: select
-    proxies:
-      - "港日台新-全自动测速"
-      - "香港-自动测速"
-      - "日台新-自动测速"
-      - "新加坡-自动测速"
+    proxies: ["港日台新-全自动测速", "香港-自动测速", "日台新-自动测速", "新加坡-自动测速"]
 
   - name: "港日台新-全自动测速"
     type: url-test
     url: "http://www.gstatic.com/generate_204"
     interval: 300
     tolerance: 50
-    filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|新北|台北|狮城|🇭🇰|🇯🇵|🇹🇼|🇸🇬"
+    filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG"
 
   - name: "香港-自动测速"
     type: url-test
     url: "http://www.gstatic.com/generate_204"
     interval: 300
     tolerance: 50
-    filter: "(?i)香港|HK|🇭🇰"
+    filter: "(?i)香港|HK"
 
   - name: "日台新-自动测速"
     type: url-test
     url: "http://www.gstatic.com/generate_204"
     interval: 300
     tolerance: 50
-    filter: "(?i)日本|台湾|新加坡|JP|TW|SG|新北|台北|狮城|🇯🇵|🇹🇼|🇸🇬"
+    filter: "(?i)日本|台湾|新加坡|JP|TW|SG"
 
   - name: "新加坡-自动测速"
     type: url-test
     url: "http://www.gstatic.com/generate_204"
     interval: 300
     tolerance: 50
-    filter: "(?i)新加坡|SG|狮城|🇸🇬"
+    filter: "(?i)新加坡|SG"
 
   - name: "Spotify"
     type: select
-    proxies:
-      - "新加坡-自动测速"
-      - "日台新-自动测速"
-      - "节点选择"
+    proxies: ["新加坡-自动测速", "日台新-自动测速", "节点选择"]
 
   - name: "AI"
     type: select
-    proxies:
-      - "日台新-自动测速"
-      - "港日台新-全自动测速"
-      - "节点选择"
+    proxies: ["日台新-自动测速", "港日台新-全自动测速", "节点选择"]
 
 rules:
   - GEOIP,LAN,DIRECT
   - GEOIP,CN,DIRECT
   - GEOSITE,CN,DIRECT
-
-  - GEOSITE,spotify,Spotify
   - DOMAIN-SUFFIX,spotify.com,Spotify
-  - DOMAIN-SUFFIX,scdn.co,Spotify
   - DOMAIN-KEYWORD,spotify,Spotify
-
-  - GEOSITE,openai,AI
   - DOMAIN-SUFFIX,openai.com,AI
   - DOMAIN-SUFFIX,chatgpt.com,AI
-  - DOMAIN-SUFFIX,oaistatic.com,AI
-  - DOMAIN-SUFFIX,oaiusercontent.com,AI
-
-  - GEOSITE,google-gemini,AI
   - DOMAIN-SUFFIX,gemini.google.com,AI
-  - DOMAIN-SUFFIX,bard.google.com,AI
-  - DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI
-
-  - GEOSITE,anthropic,AI
-  - DOMAIN-SUFFIX,anthropic.com,AI
   - DOMAIN-SUFFIX,claude.ai,AI
-
-  - DOMAIN-SUFFIX,perplexity.ai,AI
-  - DOMAIN-SUFFIX,copilot.microsoft.com,AI
-
   - MATCH,节点选择
