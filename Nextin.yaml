@@ -1,1 +1,91 @@
-nextin://install?module=subscription-template&url=https%3A%2F%2Fhub.nextinnet.com%2Fapi%2Ftemplate%3Frules%3Dprivate-ip%252Copenai%252Cgemini%252Canthropic%252Cperplexity%252Cspotify%252Ccn-ip%252Cglobal%26draft%3D%257B%2522schemaVersion%2522%253A1%252C%2522catalogVersion%2522%253A%2522routing-1-1dee4937%2522%252C%2522ruleIDs%2522%253A%255B%2522private-ip%2522%252C%2522openai%2522%252C%2522gemini%2522%252C%2522anthropic%2522%252C%2522perplexity%2522%252C%2522spotify%2522%252C%2522cn-ip%252C%2522global%2522%255D%252C%2522defaultPolicy%2522%253A%257B%2522includePattern%2522%253A%2522.*%2522%252C%2522excludeRegions%2522%253A%255B%255D%252C%2522excludePattern%2522%253A%2522%2522%252C%2522groupType%2522%253A%2522select%2522%257D%252C%2522ruleOverrides%2522%253A%257B%2522openai%2522%253A%257B%2522includePattern%2522%253A%2522%2528%253Fi%2529%2528%2528%253F%253A%25E6%2597%25A5%25E6%259C%25AC%257CJapan%257CTokyo%257COsaka%257C%255C%255CbJP%255C%255Cb%2529%257C%2528%253F%253A%25E6%2596%25B0%25E5%258A%25A0%25E5%259D%25A1%257CSingapore%257C%255C%255CbSG%255C%255Cb%2529%257C%2528%253F%253A%25E5%258F%25B0%25E6%25B9%25BE%257CTaiwan%257C%255C%255CbTW%255C%255Cb%2529%2529%2522%252C%2522excludeRegions%2522%253A%255B%255D%252C%2522excludePattern%2522%253A%2522%2522%252C%2522groupType%2522%253A%2522select%2522%257D%252C%2522gemini%2522%253A%257B%2522includePattern%2522%253A%2522%2528%253Fi%2529%2528%2528%253F%253A%25E6%2597%25A5%25E6%259C%25AC%257CJapan%257CTokyo%257COsaka%257C%255C%255CbJP%255C%255Cb%2529%257C%2528%253F%253A%25E6%2596%25B0%25E5%258A%25A0%25E5%259D%25A1%257CSingapore%257C%255C%255CbSG%255C%255Cb%2529%257C%2528%253F%253A%25E5%258F%25B0%25E6%25B9%25BE%257CTaiwan%257C%255C%255CbTW%255C%255Cb%2529%2529%2522%252C%2522excludeRegions%2522%253A%255B%255D%252C%2522excludePattern%2522%253A%2522%2522%252C%2522groupType%2522%253A%2522select%2522%257D%252C%2522anthropic%2522%253A%257B%2522includePattern%2522%253A%2522%2528%253Fi%2529%2528%2528%253F%253A%25E6%2597%25A5%25E6%259C%25AC%257CJapan%257CTokyo%257COsaka%257C%255C%255CbJP%255C%255Cb%2529%257C%2528%253F%253A%25E6%2596%25B0%25E5%258A%25A0%25E5%259D%25A1%257CSingapore%257C%255C%255CbSG%255C%255Cb%2529%257C%2528%253F%253A%25E5%258F%25B0%25E6%25B9%25BE%257CTaiwan%257C%255C%255CbTW%255C%255Cb%2529%2529%2522%252C%2522excludeRegions%2522%253A%255B%255D%252C%2522excludePattern%2522%253A%2522%2522%252C%2522groupType%2522%253A%2522select%2522%257D%252C%2522perplexity%2522%253A%257B%2522includePattern%2522%253A%2522%2528%253Fi%2529%2528%2528%253F%253A%25E6%2597%25A5%25E6%259C%25AC%257CJapan%257CTokyo%257COsaka%257C%255C%255CbJP%255C%255Cb%2529%257C%2528%253F%253A%25E6%2596%25B0%25E5%258A%25A0%25E5%259D%25A1%257CSingapore%257C%255C%255CbSG%255C%255Cb%2529%257C%2528%253F%253A%25E5%258F%25B0%25E6%25B9%25BE%257CTaiwan%257C%255C%255CbTW%255C%255Cb%2529%2529%2522%252C%2522excludeRegions%2522%253A%255B%255D%252C%2522excludePattern%2522%253A%2522%2522%252C%2522groupType%2522%253A%2522select%2522%257D%252C%2522spotify%2522%253A%257B%2522includePattern%2522%253A%2522%2528%253Fi%2529%2528%2528%253F%253A%25E6%2596%25B0%25E5%258A%25A0%25E5%259D%25A1%257CSingapore%257C%255C%255CbSG%255C%255Cb%2529%2529%2522%252C%2522excludeRegions%2522%253A%255B%255D%252C%2522excludePattern%2522%253A%2522%2522%252C%2522groupType%2522%253A%2522select%2522%257D%257D%252C%2522matchTarget%2522%253A%2522proxy%2522%257D&name=AI%E6%9C%8D%E5%8A%A1%E3%80%81Spotify%E3%80%81%E6%B5%B7%E5%A4%96%E5%9F%9F%E5%90%8D%E8%87%AA%E5%8A%A8%E5%88%86%E6%B5%81
+x-nextin:
+  version: 1
+  mode: template
+
+proxies: []
+
+proxy-groups:
+  - name: "节点选择"
+    type: select
+    proxies:
+      - "日台新-自动"
+      - "港日台新-全自动"
+      - "新加坡-自动"
+      - "香港-自动"
+      - "DIRECT"
+
+  - name: "港日台新-全自动"
+    type: url-test
+    filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+    lazy: true
+
+  - name: "香港-自动"
+    type: url-test
+    filter: "(?i)香港|HK|🇭🇰"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+    lazy: true
+
+  - name: "日台新-自动"
+    type: url-test
+    filter: "(?i)日本|台湾|新加坡|JP|TW|SG|狮城"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+    lazy: true
+
+  - name: "新加坡-自动"
+    type: url-test
+    filter: "(?i)新加坡|SG|狮城|🇸🇬"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+    lazy: true
+
+  - name: "AI"
+    type: select
+    proxies:
+      - "日台新-自动"
+      - "港日台新-全自动"
+      - "节点选择"
+
+  - name: "Spotify"
+    type: select
+    proxies:
+      - "新加坡-自动"
+      - "日台新-自动"
+      - "节点选择"
+
+rules:
+  # Spotify 专项（定向到 Spotify 组 -> 自动匹配 SG 新加坡节点）
+  - GEOSITE,spotify,Spotify
+  - DOMAIN-SUFFIX,spotify.com,Spotify
+  - DOMAIN-KEYWORD,spotify,Spotify
+
+  # AI 大合集专项（包含 ChatGPT, Gemini, Claude, Perplexity 等 -> 自动匹配 JP/TW/SG 节点）
+  - GEOSITE,openai,AI
+  - DOMAIN-SUFFIX,openai.com,AI
+  - DOMAIN-SUFFIX,chatgpt.com,AI
+  
+  - GEOSITE,google-gemini,AI
+  - DOMAIN-SUFFIX,gemini.google.com,AI
+  
+  - GEOSITE,anthropic,AI
+  - DOMAIN-SUFFIX,claude.ai,AI
+
+  - DOMAIN-SUFFIX,perplexity.ai,AI
+  - DOMAIN-SUFFIX,copilot.microsoft.com,AI
+
+  # 基础流量分流
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - GEOSITE,CN,DIRECT
+  - MATCH,节点选择
