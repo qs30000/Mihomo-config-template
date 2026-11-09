@@ -7,47 +7,68 @@ proxies: []
 proxy-groups:
   - name: "节点选择"
     type: select
+    include-all-proxies: true
+    filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
     proxies:
       - "港日台新-全自动"
-      - "香港-自动"
       - "日台新-自动"
+      - "香港-自动"
+      - "日本-自动"
+      - "台湾-自动"
       - "新加坡-自动"
       - "DIRECT"
 
   - name: "港日台新-全自动"
     type: url-test
     include-all-proxies: true
-    filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城"
+    filter: "(?i)香港|日本|台湾|新加坡|狮城|HK|hk|JP|jp|TW|tw|SG|sg"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
     url: "https://cp.cloudflare.com/generate_204"
     interval: 300
     tolerance: 50
-    lazy: true
-
-  - name: "香港-自动"
-    type: url-test
-    include-all-proxies: true
-    filter: "(?i)香港|HK|🇭🇰"
-    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    url: "https://cp.cloudflare.com/generate_204"
-    interval: 300
-    tolerance: 50
-    lazy: true
 
   - name: "日台新-自动"
     type: url-test
     include-all-proxies: true
-    filter: "(?i)日本|台湾|新加坡|JP|TW|SG|狮城"
+    filter: "(?i)日本|台湾|新加坡|狮城|JP|jp|TW|tw|SG|sg"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
     url: "https://cp.cloudflare.com/generate_204"
     interval: 300
     tolerance: 50
-    lazy: true
+
+  - name: "香港-自动"
+    type: url-test
+    include-all-proxies: true
+    filter: "(?i)香港|HK|hk"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+    
+  - name: "日本-自动"
+    type: url-test
+    include-all-proxies: true
+    filter: "(?i)日本|JP|jp"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+
+  - name: "台湾-自动"
+    type: url-test
+    include-all-proxies: true
+    filter: "(?i)台湾|TW|tw"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+
 
   - name: "新加坡-自动"
     type: url-test
     include-all-proxies: true
-    filter: "(?i)新加坡|SG|狮城|🇸🇬"
+    filter: "(?i)新加坡|狮城|SG|🇸🇬"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
     url: "https://cp.cloudflare.com/generate_204"
     interval: 300
@@ -58,14 +79,12 @@ proxy-groups:
     type: select
     proxies:
       - "新加坡-自动"
-      - "日台新-自动"
       - "节点选择"
 
   - name: "AI"
     type: select
     proxies:
       - "日台新-自动"
-      - "港日台新-全自动"
       - "节点选择"
 
 rules:
