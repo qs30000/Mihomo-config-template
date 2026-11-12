@@ -1,5 +1,5 @@
 # Mihomo-config-template
-自用mihomo配置
+# 自用mihomo配置
 
 Nextin.yaml 为Nextin分流模板
 
