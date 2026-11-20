@@ -100,8 +100,10 @@ config.rules = [
     "DOMAIN-SUFFIX,jsdelivr.net,节点选择",
     "DOMAIN-KEYWORD,github,节点选择",
 
-    // 2. 自定义规则（坚果云走代理）
+    // 坚果云与 Obsidian WebDAV 专项（绕过公司内网解析）
+    // "DOMAIN,dav.jianguoyun.com,节点选择",
     // "DOMAIN-KEYWORD,jianguoyun,节点选择",
+    // "DOMAIN-SUFFIX,nutstore.net,节点选择",
 
     // 3. AI 专项规则（全部集中走 AI 组 -> 日台新节点）
     // OpenAI / ChatGPT
