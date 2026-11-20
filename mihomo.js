@@ -93,41 +93,46 @@ function main(config) {
   config['proxy-groups'] = proxyGroups;
 
   // 4. 重构匹配规则（整合主流大陆无法使用的海外 AI 平台）
-  config.rules = [
-    // 局域网与国内直连
-    "GEOIP,LAN,DIRECT",
-    "GEOIP,CN,DIRECT",
-    "GEOSITE,CN,DIRECT",
+config.rules = [
+    // 1. 核心基础设施：确保 GeoData 数据库与 GitHub 正常更新
+    "DOMAIN-SUFFIX,github.com,节点选择",
+    "DOMAIN-SUFFIX,githubusercontent.com,节点选择",
+    "DOMAIN-SUFFIX,jsdelivr.net,节点选择",
+    "DOMAIN-KEYWORD,github,节点选择",
 
-    // === OpenAI / ChatGPT 专项规则 ===
+    // 2. 自定义规则（坚果云走代理）
+    // "DOMAIN-KEYWORD,jianguoyun,节点选择",
+
+    // 3. AI 专项规则（全部集中走 AI 组 -> 日台新节点）
+    // OpenAI / ChatGPT
     "GEOSITE,openai,AI",
-    "DOMAIN-SUFFIX,openai.com,AI",
-    "DOMAIN-SUFFIX,chatgpt.com,AI",
-    "DOMAIN-SUFFIX,oaistatic.com,AI",
-    "DOMAIN-SUFFIX,oaiusercontent.com,AI",
     "DOMAIN-KEYWORD,openai,AI",
 
-    // === Google Gemini / Google AI 专项规则 ===
+    // Google Gemini / AI Studio（补全关联域名，防止页面加载异常）
     "GEOSITE,google-gemini,AI",
     "DOMAIN-SUFFIX,gemini.google.com,AI",
-    "DOMAIN-SUFFIX,bard.google.com,AI",
+    "DOMAIN-SUFFIX,aistudio.google.com,AI",
+    "DOMAIN-SUFFIX,ai.google.dev,AI",
     "DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI",
     "DOMAIN-KEYWORD,gemini,AI",
 
-    // === Anthropic Claude 专项规则 ===
+    // Anthropic Claude
     "GEOSITE,anthropic,AI",
-    "DOMAIN-SUFFIX,anthropic.com,AI",
-    "DOMAIN-SUFFIX,claude.ai,AI",
     "DOMAIN-KEYWORD,anthropic,AI",
     "DOMAIN-KEYWORD,claude,AI",
 
-    // === Perplexity AI 专项规则 ===
+    // Perplexity & Copilot
     "DOMAIN-SUFFIX,perplexity.ai,AI",
-
-    // === 微软 Copilot / 其它常用海外 AI 专项规则 ===
     "DOMAIN-SUFFIX,copilot.microsoft.com,AI",
 
-    // 其他剩余海外流量走“节点选择”
+    // 4. 国内域名直连（纯域名匹配，不触发 DNS 解析）
+    "GEOSITE,CN,DIRECT",
+
+    // 5. IP 规则放在最后，避免提前触发 DNS 解析干扰上面的域名分流
+    "GEOIP,LAN,DIRECT",
+    "GEOIP,CN,DIRECT",
+
+    // 6. 兜底规则
     "MATCH,节点选择"
   ];
 
