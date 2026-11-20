@@ -8,103 +8,82 @@ proxy-groups:
   - name: "节点选择"
     type: select
     include-all-proxies: true
-    filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城"
+    filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城|🇭🇰|🇯🇵|🇹🇼|🇸🇬"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
     proxies:
-      - "港日台新-全自动"
-      - "日台新-自动"
-      - "香港-自动"
-      - "日本-自动"
-      - "台湾-自动"
-      - "新加坡-自动"
+      - "日台新-手动"
+      - "香港-手动"
+      - "新加坡-手动"
       - "DIRECT"
 
-  - name: "港日台新-全自动"
-    type: url-test
-    include-all-proxies: true
-    filter: "(?i)香港|日本|台湾|新加坡|狮城|HK|hk|JP|jp|TW|tw|SG|sg"
-    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    url: "https://cp.cloudflare.com/generate_204"
-    interval: 300
-    tolerance: 50
-
-  - name: "日台新-自动"
-    type: url-test
-    include-all-proxies: true
-    filter: "(?i)日本|台湾|新加坡|狮城|JP|jp|TW|tw|SG|sg"
-    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    url: "https://cp.cloudflare.com/generate_204"
-    interval: 300
-    tolerance: 50
-
-  - name: "香港-自动"
-    type: url-test
-    include-all-proxies: true
-    filter: "(?i)香港|HK|hk"
-    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    url: "https://cp.cloudflare.com/generate_204"
-    interval: 300
-    tolerance: 50
-    
-  - name: "日本-自动"
-    type: url-test
-    include-all-proxies: true
-    filter: "(?i)日本|JP|jp"
-    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    url: "https://cp.cloudflare.com/generate_204"
-    interval: 300
-    tolerance: 50
-
-  - name: "台湾-自动"
-    type: url-test
-    include-all-proxies: true
-    filter: "(?i)台湾|TW|tw"
-    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    url: "https://cp.cloudflare.com/generate_204"
-    interval: 300
-    tolerance: 50
-
-
-  - name: "新加坡-自动"
-    type: url-test
-    include-all-proxies: true
-    filter: "(?i)新加坡|狮城|SG|🇸🇬"
-    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    url: "https://cp.cloudflare.com/generate_204"
-    interval: 300
-    tolerance: 50
-    lazy: true
-
-  - name: "Spotify"
+  - name: "香港-手动"
     type: select
-    proxies:
-      - "新加坡-自动"
-      - "节点选择"
+    include-all-proxies: true
+    filter: "(?i)香港|HK|🇭🇰"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
+
+  - name: "日台新-手动"
+    type: select
+    include-all-proxies: true
+    filter: "(?i)日本|台湾|新加坡|JP|TW|SG|狮城|🇯🇵|🇹🇼|🇸🇬"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
+
+  - name: "新加坡-手动"
+    type: select
+    include-all-proxies: true
+    filter: "(?i)新加坡|SG|狮城|🇸🇬"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
 
   - name: "AI"
     type: select
     proxies:
-      - "日台新-自动"
+      - "日台新-手动"
+      - "节点选择"
+
+  - name: "Spotify"
+    type: select
+    proxies:
+      - "新加坡-手动"
+      - "日台新-手动"
       - "节点选择"
 
 rules:
-  # Spotify流量分流
+  # 1. 核心基础设施：确保 GeoData 数据库与 GitHub 正常更新
+  - DOMAIN-SUFFIX,github.com,节点选择
+  - DOMAIN-SUFFIX,githubusercontent.com,节点选择
+  - DOMAIN-SUFFIX,jsdelivr.net,节点选择
+  - DOMAIN-KEYWORD,github,节点选择
+
+  # 2. Spotify 专项规则（优先指向新加坡手动组）
   - GEOSITE,spotify,Spotify
   - DOMAIN-SUFFIX,spotify.com,Spotify
+  - DOMAIN-SUFFIX,scdn.co,Spotify
   - DOMAIN-KEYWORD,spotify,Spotify
 
-  # 国外AI流量分流
+  # 3. AI 专项规则（集中指向 AI 组 -> 默认日台新手动组）
   - GEOSITE,openai,AI
-  - DOMAIN-SUFFIX,openai.com,AI
-  - DOMAIN-SUFFIX,chatgpt.com,AI
+  - DOMAIN-KEYWORD,openai,AI
+
   - GEOSITE,google-gemini,AI
   - DOMAIN-SUFFIX,gemini.google.com,AI
+  - DOMAIN-SUFFIX,aistudio.google.com,AI
+  - DOMAIN-SUFFIX,ai.google.dev,AI
+  - DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI
   - DOMAIN-KEYWORD,gemini,AI
+
   - GEOSITE,anthropic,AI
-  - DOMAIN-SUFFIX,claude.ai,AI
-  
-  # 基础流量分流
+  - DOMAIN-KEYWORD,anthropic,AI
+  - DOMAIN-KEYWORD,claude,AI
+
+  - DOMAIN-SUFFIX,perplexity.ai,AI
+  - DOMAIN-SUFFIX,copilot.microsoft.com,AI
+
+  # 4. 国内域名直连（纯域名匹配，不提前触发 DNS 解析）
+  - GEOSITE,CN,DIRECT
+
+  # 5. IP 规则放最后，避免干扰域名分流
   - GEOIP,LAN,DIRECT
   - GEOIP,CN,DIRECT
-  - GEOSITE,CN,DIRECT
+
+  # 6. 兜底规则
   - MATCH,节点选择
