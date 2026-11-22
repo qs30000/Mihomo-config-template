@@ -10,11 +10,6 @@ proxy-groups:
     include-all-proxies: true
     filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城|🇭🇰|🇯🇵|🇹🇼|🇸🇬"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    proxies:
-      - "日台新-手动"
-      - "香港-手动"
-      - "新加坡-手动"
-      - "DIRECT"
 
   - name: "香港-手动"
     type: select
