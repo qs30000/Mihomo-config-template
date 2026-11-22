@@ -38,13 +38,16 @@ proxy-groups:
     type: select
     proxies:
       - "日台新-手动"
+      - "香港-手动"
+      - "新加坡-手动"
       - "节点选择"
 
   - name: "Spotify"
     type: select
     proxies:
-      - "新加坡-手动"
       - "日台新-手动"
+      - "香港-手动"
+      - "新加坡-手动"
       - "节点选择"
 
 rules:
@@ -63,13 +66,6 @@ rules:
   # 3. AI 专项规则（集中指向 AI 组 -> 默认日台新手动组）
   - GEOSITE,openai,AI
   - DOMAIN-KEYWORD,openai,AI
-
-  - GEOSITE,google-gemini,AI
-  - DOMAIN-SUFFIX,gemini.google.com,AI
-  - DOMAIN-SUFFIX,aistudio.google.com,AI
-  - DOMAIN-SUFFIX,ai.google.dev,AI
-  - DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI
-  - DOMAIN-KEYWORD,gemini,AI
 
   - GEOSITE,anthropic,AI
   - DOMAIN-KEYWORD,anthropic,AI
