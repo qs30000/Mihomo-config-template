@@ -1,8 +1,8 @@
 function main(config) {
   // 1. 筛选有效节点
-  const generalRegex = /香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城/i;
+  const generalRegex = /香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城|🇭🇰|🇯🇵|🇹🇼|🇸🇬/i;
   const hkRegex = /香港|HK|🇭🇰/i;
-  const aiRegex = /日本|台湾|新加坡|JP|TW|SG|狮城/i;
+  const aiRegex = /日本|台湾|新加坡|JP|TW|SG|狮城|🇯🇵|🇹🇼|🇸🇬/i;
   const excludeRegex = /倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire/i;
 
   const validProxies = (config.proxies || []).filter(
@@ -18,7 +18,7 @@ function main(config) {
     .filter((p) => aiRegex.test(p.name))
     .map((p) => p.name);
 
-  // 2. 建立策略组：香港自动测速 + 日常节点选择 + AI 自动测速 + AI 专用节点
+  // 2. 建立策略组
   config["proxy-groups"] = [
     {
       name: "节点选择",
@@ -48,12 +48,41 @@ function main(config) {
     }
   ];
 
-  // 3. 极简分流规则（不依赖 GeoData，零额外内存开销）
+  // 3. 配置远程规则集
+  config["rule-providers"] = {
+    openai: {
+      type: "http",
+      behavior: "domain",
+      format: "mrs",
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/openai.mrs",
+      path: "./ruleset/openai.mrs",
+      interval: 86400
+    },
+    gemini: {
+      type: "http",
+      behavior: "domain",
+      format: "mrs",
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-gemini.mrs",
+      path: "./ruleset/google-gemini.mrs",
+      interval: 86400
+    }
+  };
+
+  // 4. 分流规则（Windows 纯浏览器插件模可去掉中间 3 条 CN/LAN 直连规则）
   config["rules"] = [
-    "DOMAIN-REGEX,^(.+\\.)?(openai|chatgpt|oaistatic|oaiusercontent|sora|gemini|aistudio|anthropic|claude|perplexity|copilot)\\.(com|ai|dev|net|org)$,AI",
+    "DOMAIN-KEYWORD,github,节点选择",
+    "DOMAIN-SUFFIX,jsdelivr.net,节点选择",
+
+    "RULE-SET,openai,AI",
+    "RULE-SET,gemini,AI",
     "DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI",
+    "DOMAIN-SUFFIX,perplexity.ai,AI",
+    
     "MATCH,节点选择"
   ];
+
+  return config;
+}
 
   return config;
 }
