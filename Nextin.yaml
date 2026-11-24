@@ -11,85 +11,51 @@ proxy-groups:
     filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城|🇭🇰|🇯🇵|🇹🇼|🇸🇬"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
     proxies:
-      - "香港-自动"
-      - "日台新-自动"
-      
-  - name: "香港-自动"
+      - "香港-自动测速"
+      - "DIRECT"
+
+  - name: "香港-自动测速"
     type: url-test
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
     include-all-proxies: true
     filter: "(?i)香港|HK|🇭🇰"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    url: "https://cp.cloudflare.com/generate_204"
-    interval: 300
-    tolerance: 50
-    lazy: true
-    
-  - name: "日台新-自动"
-    type: url-test
-    include-all-proxies: true
-    filter: "(?i)日本|台湾|新加坡|JP|TW|SG|狮城"
-    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
-    url: "https://cp.cloudflare.com/generate_204"
-    interval: 300
-    tolerance: 50
-    lazy: true
 
   - name: "AI"
     type: select
+    include-all-proxies: true
+    filter: "(?i)日本|台湾|新加坡|JP|TW|SG|狮城|🇯🇵|🇹🇼|🇸🇬"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
     proxies:
-      - "日台新-自动"
-      - "节点选择"
+      - "AI-自动测速"
 
-  - name: "Spotify"
-    type: select
-    proxies:
-      - "香港-自动"
-      - "节点选择"
+  - name: "AI-自动测速"
+    type: url-test
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+    include-all-proxies: true
+    filter: "(?i)日本|台湾|新加坡|JP|TW|SG|狮城|🇯🇵|🇹🇼|🇸🇬"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
 
 rules:
-  # 1. 核心基础设施：确保 GeoData 数据库与 GitHub 正常更新
+  # 1. 核心基础设施
   - DOMAIN-SUFFIX,github.com,节点选择
   - DOMAIN-SUFFIX,githubusercontent.com,节点选择
   - DOMAIN-SUFFIX,jsdelivr.net,节点选择
   - DOMAIN-KEYWORD,github,节点选择
 
-  # 2. Spotify 客户端专项规则
-  - GEOSITE,spotify,Spotify
-  - DOMAIN-SUFFIX,spotify.com,Spotify
-  - DOMAIN-SUFFIX,spotifycdn.com,Spotify
-  - DOMAIN-SUFFIX,scdn.co,Spotify
-  - DOMAIN-SUFFIX,spotilocal.com,Spotify
-  - DOMAIN-KEYWORD,spotify,Spotify
-
-  # 3. ChatGPT / OpenAI 专项（走 AI 组 -> 日台新）
-  - GEOSITE,openai,AI
-  - DOMAIN-SUFFIX,openai.com,AI
-  - DOMAIN-SUFFIX,chatgpt.com,AI
-  - DOMAIN-SUFFIX,oaistatic.com,AI
-  - DOMAIN-SUFFIX,oaiusercontent.com,AI
-  - DOMAIN-SUFFIX,sora.com,AI
-  - DOMAIN-KEYWORD,openai,AI
-  - DOMAIN-KEYWORD,chatgpt,AI
-
-  # 4. 其他海外 AI
-  - GEOSITE,google-gemini,AI
-  - DOMAIN-SUFFIX,gemini.google.com,AI
-  - DOMAIN-SUFFIX,aistudio.google.com,AI
-  - DOMAIN-SUFFIX,ai.google.dev,AI
+  # 2. 海外 AI 专项（单条正则 + Google AI 补充，走日台新）
+  - DOMAIN-REGEX,^(.+\.)?(openai|chatgpt|oaistatic|oaiusercontent|sora|gemini|aistudio|anthropic|claude|perplexity|copilot)\.(com|ai|dev|net|org)$,AI
   - DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI
-  - DOMAIN-KEYWORD,gemini,AI
-  - GEOSITE,anthropic,AI
-  - DOMAIN-KEYWORD,anthropic,AI
-  - DOMAIN-KEYWORD,claude,AI
-  - DOMAIN-SUFFIX,perplexity.ai,AI
-  - DOMAIN-SUFFIX,copilot.microsoft.com,AI
+  - GEOSITE,google-gemini,AI
 
-  # 5. 国内域名直连（纯域名匹配，不提前触发 DNS 解析）
+  # 3. 国内域名与 IP 直连
   - GEOSITE,CN,DIRECT
-
-  # 6. IP 规则放最后，避免干扰域名分流
   - GEOIP,LAN,DIRECT
   - GEOIP,CN,DIRECT
 
-  # 7. 兜底规则
+  # 4. 兜底规则
   - MATCH,节点选择
