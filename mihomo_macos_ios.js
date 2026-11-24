@@ -1,8 +1,8 @@
 function main(config) {
   // 1. 筛选有效节点
-  const generalRegex = /香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城/i;
+  const generalRegex = /香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城|🇭🇰|🇯🇵|🇹🇼|🇸🇬/i;
   const hkRegex = /香港|HK|🇭🇰/i;
-  const aiRegex = /日本|台湾|新加坡|JP|TW|SG|狮城/i;
+  const aiRegex = /日本|台湾|新加坡|JP|TW|SG|狮城|🇯🇵|🇹🇼|🇸🇬/i;
   const excludeRegex = /倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire/i;
 
   const validProxies = (config.proxies || []).filter(
@@ -18,7 +18,7 @@ function main(config) {
     .filter((p) => aiRegex.test(p.name))
     .map((p) => p.name);
 
-  // 2. 建立策略组：香港自动测速 + 日常节点选择 + AI 自动测速 + AI 专用节点
+  // 2. 建立策略组
   config["proxy-groups"] = [
     {
       name: "节点选择",
@@ -48,24 +48,40 @@ function main(config) {
     }
   ];
 
-  // 3. 完整分流规则（适配系统代理全局接管模式）
+  // 3. 配置远程规则集
+  config["rule-providers"] = {
+    openai: {
+      type: "http",
+      behavior: "domain",
+      format: "mrs",
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/openai.mrs",
+      path: "./ruleset/openai.mrs",
+      interval: 86400
+    },
+    gemini: {
+      type: "http",
+      behavior: "domain",
+      format: "mrs",
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-gemini.mrs",
+      path: "./ruleset/google-gemini.mrs",
+      interval: 86400
+    }
+  };
+
+  // 4. 分流规则（Windows 纯浏览器插件模式可去掉中间 3 条 CN/LAN 直连规则）
   config["rules"] = [
-    // 基础设施与规则库更新（防止 GitHub 无法访问导致 GeoData 更新失败）
-    "DOMAIN-SUFFIX,github.com,节点选择",
-    "DOMAIN-SUFFIX,githubusercontent.com,节点选择",
-    "DOMAIN-SUFFIX,jsdelivr.net,节点选择",
     "DOMAIN-KEYWORD,github,节点选择",
+    "DOMAIN-SUFFIX,jsdelivr.net,节点选择",
 
-    // 海外 AI 专项分流（走 AI 组 -> 日台新自动测速）
-    "DOMAIN-REGEX,^(.+\\.)?(openai|chatgpt|oaistatic|oaiusercontent|sora|gemini|aistudio|anthropic|claude|perplexity|copilot)\\.(com|ai|dev|net|org)$,AI",
+    "RULE-SET,openai,AI",
+    "RULE-SET,gemini,AI",
     "DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI",
+    "DOMAIN-SUFFIX,perplexity.ai,AI",
 
-    // 国内域名与局域网/国内 IP 直连（开启系统代理后必须保留）
     "GEOSITE,CN,DIRECT",
     "GEOIP,LAN,DIRECT",
     "GEOIP,CN,DIRECT",
 
-    // 其余海外站点兜底走日常节点
     "MATCH,节点选择"
   ];
 
