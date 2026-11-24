@@ -40,17 +40,22 @@ proxy-groups:
     filter: "(?i)日本|台湾|新加坡|JP|TW|SG|狮城|🇯🇵|🇹🇼|🇸🇬"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
 
+rule-providers:
+  openai:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/openai.mrs"
+    path: ./ruleset/openai.mrs
+    interval: 86400
+
 rules:
   # 1. 核心基础设施
-  - DOMAIN-SUFFIX,github.com,节点选择
-  - DOMAIN-SUFFIX,githubusercontent.com,节点选择
-  - DOMAIN-SUFFIX,jsdelivr.net,节点选择
   - DOMAIN-KEYWORD,github,节点选择
+  - DOMAIN-SUFFIX,jsdelivr.net,节点选择
 
-  # 2. 海外 AI 专项（单条正则 + Google AI 补充，走日台新）
-  - DOMAIN-REGEX,^(.+\.)?(openai|chatgpt|oaistatic|oaiusercontent|sora|gemini|aistudio|anthropic|claude|perplexity|copilot)\.(com|ai|dev|net|org)$,AI
-  - DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI
-  - GEOSITE,google-gemini,AI
+  # 2. 海外 AI 专项（走日台新）
+  - RULE-SET,openai,AI
 
   # 3. 国内域名与 IP 直连
   - GEOSITE,CN,DIRECT
