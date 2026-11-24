@@ -57,14 +57,6 @@ function main(config) {
       url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/openai.mrs",
       path: "./ruleset/openai.mrs",
       interval: 86400
-    },
-    gemini: {
-      type: "http",
-      behavior: "domain",
-      format: "mrs",
-      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-gemini.mrs",
-      path: "./ruleset/google-gemini.mrs",
-      interval: 86400
     }
   };
 
@@ -74,9 +66,6 @@ function main(config) {
     "DOMAIN-SUFFIX,jsdelivr.net,节点选择",
 
     "RULE-SET,openai,AI",
-    "RULE-SET,gemini,AI",
-    "DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI",
-    "DOMAIN-SUFFIX,perplexity.ai,AI",
 
     "GEOSITE,CN,DIRECT",
     "GEOIP,LAN,DIRECT",
