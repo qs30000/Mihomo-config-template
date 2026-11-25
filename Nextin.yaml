@@ -11,8 +11,18 @@ proxy-groups:
     filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城|🇭🇰|🇯🇵|🇹🇼|🇸🇬"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
     proxies:
+      - "所有节点-自动测速"
       - "香港-自动测速"
       - "DIRECT"
+
+  - name: "所有节点-自动测速"
+    type: url-test
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+    include-all-proxies: true
+    filter: "(?i)香港|日本|台湾|新加坡|HK|JP|TW|SG|狮城|🇭🇰|🇯🇵|🇹🇼|🇸🇬"
+    exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
 
   - name: "香港-自动测速"
     type: url-test
@@ -40,6 +50,13 @@ proxy-groups:
     filter: "(?i)日本|台湾|新加坡|JP|TW|SG|狮城|🇯🇵|🇹🇼|🇸🇬"
     exclude-filter: "(?i)(倍率|剩余|到期|官网|流量|3x|5x|Traffic|Expire)"
 
+  - name: "Spotify"
+    type: select
+    proxies:
+      - "香港-自动测速"
+      - "节点选择"
+
+
 rule-providers:
   openai:
     type: http
@@ -49,18 +66,29 @@ rule-providers:
     path: ./ruleset/openai.mrs
     interval: 86400
 
+  spotify:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/spotify.mrs"
+    path: ./ruleset/spotify.mrs
+    interval: 86400
+
 rules:
   # 1. 核心基础设施
   - DOMAIN-KEYWORD,github,节点选择
   - DOMAIN-SUFFIX,jsdelivr.net,节点选择
 
-  # 2. 海外 AI 专项（走日台新）
+  # 2. Spotify 专项
+  - RULE-SET,spotify,Spotify
+
+  # 3. Chatgpt 专项
   - RULE-SET,openai,AI
 
-  # 3. 国内域名与 IP 直连
+  # 4. 国内域名与 IP 直连
   - GEOSITE,CN,DIRECT
   - GEOIP,LAN,DIRECT
   - GEOIP,CN,DIRECT
 
-  # 4. 兜底规则
+  # 5. 兜底规则
   - MATCH,节点选择
